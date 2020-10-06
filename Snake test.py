@@ -1,7 +1,7 @@
 import pygame
 import sys as system
 from pygame import *
-from Game.player import Player
+from player import Player
 import random
 import numpy as np
 import queue
@@ -22,22 +22,14 @@ tiebreaker = count()
 
 
 class Game:
-    """
-    Game object that runs the entirety of Snake, including Food placement.
-    TODO: make a start screen and death screen
-    """
     def __init__(self, fps=10, caption='Snake'):
-        """
-        Constructor
-        :param fps: in-game clock tick rate (in ticks/sec)
-        """
         self._running = False
         self._display_surf = None
         self._player_surf = None
         self._food_surf = None
         self.fps = fps
         self.player = Player()
-        self.food = (20*random.randint(low_bound[0]/20, up_bound[1]/20-1),  # initially spawning food
+        self.food = (20*random.randint(low_bound[0]/20, up_bound[1]/20-1),
                      20*random.randint(low_bound[1]/20, up_bound[1]/20-1))
         self.score = 0
 
@@ -51,10 +43,6 @@ class Game:
         self.caption = caption
 
     def render(self):
-        """
-        Helper method to store all the pygame rendering objects/processes
-        :return:
-        """
         pygame.display.set_caption(self.caption)
         self._display_surf.fill((0, 0, 0))
         rect = pygame.Rect(low_bound[0], low_bound[1],
@@ -70,10 +58,6 @@ class Game:
         pygame.display.update()
 
     def respawn_food(self):
-        """
-        Helper method to respawn the food in a valid place
-        :return:
-        """
         valid = False
         while not valid:
             x = 20*random.randint(low_bound[0]/20, up_bound[0]/20-1)
@@ -82,10 +66,6 @@ class Game:
         self.food = (x, y)
 
     def check_eaten(self):
-        """
-        Checks if player has eaten the food, respawning food if the player has
-        :return: True if food is eaten, else False
-        """
         if (self.food[0] == self.player.x[0]) and (self.food[1] == self.player.y[0]):
             self.respawn_food()
             self.score += 1
@@ -111,11 +91,6 @@ class Game:
             return False
 
     def valid_move(self, move):
-        """
-        Checks if the inputted move will actually do something
-        :param move: input move
-        :return: True if valid, False otherwise
-        """
         if np.array_equal(-1*move, self.player.direction) or np.array_equal(move, self.player.direction):
             return 1
         else:
@@ -165,7 +140,7 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game(fps=120)
+    game = Game()
     # ai_player = AIPlayer(game, [10, 20], random=True)
     game.run()
     print('finish')
